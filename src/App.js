@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { prettyDOM } from "@testing-library/react";
+import { useState } from "react";
 
-function App() {
+export default function App() {
+  const [item, setItem] = useState("");
+  const [listItem, setListItem] = useState([]);
+  const [itemSearch, setItemSearch] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleAddingItem = (e) => {
+    e.preventDefault();
+    setListItem([...listItem, item]);
+  };
+
+  const handleChange = (e) => {
+    setItemSearch(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const search = listItem.includes(itemSearch);
+    console.log({ listItem, itemSearch });
+    if (search) {
+      setResult("Yes");
+    } else {
+      setResult("No");
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <input
+        type="text"
+        onChange={(e) => setItem(e.target.value)}
+        value={item}
+      />
+      <button onClick={handleAddingItem}>Add item</button>
+      <h1>List of items : </h1>
+      <ul>
+        {listItem.map((item, itemkey) => (
+          <li key={itemkey}>{item}</li>
+        ))}
+      </ul>
+
+      <input type="text" onChange={handleChange} value={itemSearch} />
+      <button onClick={handleSearch}>Search</button>
+      <h1>{result}</h1>
+    </>
   );
 }
-
-export default App;
